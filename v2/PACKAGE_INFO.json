@@ -1,0 +1,12 @@
+{
+  "name": "aiden-valuation-assistant",
+  "display_name": "aiden估值助手",
+  "format": "SKILL.md + 完整本地估值项目",
+  "source_commit": "aacdc984e48bc611613faab1204b8418a9e05588",
+  "package_date": "2026-11-20",
+  "python_requirement": "3.10+",
+  "test_baseline": "37 passed",
+  "setup_command": "python scripts/setup.py",
+  "entry_point": "SKILL.md",
+  "github_required": false
+}

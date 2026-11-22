@@ -1,0 +1,6 @@
+airline,ticker,liquidity_raw,leverage_raw,profitability_raw,efficiency_cash_raw,reference_base_score,reference_downside_score,reference_severe_score
+Ryanair,RYA.IR,49.5,75.0,90.0,62.5,66.55,65.55,65.55
+AirAsiaX,5238.KL,29.0,75.0,56.0,62.5,51.55,50.25,49.05
+Delta,DAL,22.5,75.0,65.0,62.5,50.75,48.55,47.25
+easyJet,EZJ.L,54.0,38.5,37.0,62.5,46.80,45.50,44.30
+Lufthansa,LHA.DE,41.0,32.5,56.0,62.5,43.60,43.60,41.10
