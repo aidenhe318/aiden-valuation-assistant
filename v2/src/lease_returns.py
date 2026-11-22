@@ -28,7 +28,7 @@ from engine_residual import residual_curve
 # sculpted 摊还的目标偿债覆盖率；对应 MODEL_SPEC §4 校验基准 #2
 DEFAULT_TARGET_DSCR = 1.15
 # 737-800 月租金合理区间（美元），见 MODEL_SPEC §3 模块①
-defaults_B737_800_RENT_RANGE_USD = (150_000.0, 280_000.0)
+B737_800_RENT_RANGE_USD = (150_000.0, 280_000.0)
 # Equity IRR 仅作周期参考；15% 以上即解释估值驱动因素
 EQUITY_IRR_REFERENCE_RANGE = (0.10, 0.20)
 IRR_EXPLANATION_TRIGGER = 0.15

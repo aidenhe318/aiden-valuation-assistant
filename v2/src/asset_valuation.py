@@ -316,7 +316,7 @@ def write_valuation_report(
     output_path: str | Path,
     cfg: SuiteConfig,
 ) -> Path:
-    """将估值、敏感性、逐月明细及假设来源写入 Excel报告。"""
+    """将估值、敏感性、逐月明细及假设来源写入 Excel 报告。"""
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     with pd.ExcelWriter(path, engine="openpyxl") as writer:
