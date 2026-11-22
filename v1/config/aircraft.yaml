@@ -1,0 +1,74 @@
+# 整机与发动机租赁估值套件 — 默认配置
+# 所有参数默认值按公开来源校准，见 MODEL_SPEC.md §2
+# 禁止硬编码绝对路径；本文件为唯一假设来源 (single source of truth)
+
+# ── 整机 ──────────────────────────────
+asset:
+  type: B737-800
+  year_of_manufacture: 2016            # 2026 年时 10 年机龄
+  purchase_price_usd: 51_000_000       # 2016 年新机交付价（约值）
+  current_market_value_usd: 24_000_000 # 10 年机龄 CMV $22–26M（IBA/Ishka，可信度高）
+  fh_per_fc: 2.0                       # 窄体机典型 1.8–2.2
+  monthly_utilization_fc: 250          # 每月循环数（约 500 FH / 2.0 FH:FC）
+
+# ── 发动机（参数为单台；count 为安装数量）──
+engines:
+  model: CFM56-7B26
+  count: 2
+  half_life_value_each_usd: 5_000_000  # IBA：半寿在役单台 $4M–6M
+  current_cycles: 18_000               # 单机总循环（模型起点）
+  llps:                                # 寿命限制件分组（Aircraft Commerce / EASA ALS，可信度高）
+    - {group: Fan_LPC, limit_cycles: 30000, shipset_share: 0.30}
+    - {group: HPC_HPT,  limit_cycles: 20000, shipset_share: 0.45}  # HPT 盘最贵，占比最高
+    - {group: LPT,      limit_cycles: 25000, shipset_share: 0.25}
+  llp_shipset_cost_usd: 3_900_000      # CFM56 全 LLP 套件目录价（-5B 外推，可信度中）
+  shop_visit_cost_usd: 1_300_000       # 全大修；性能恢复约 $0.8M
+  first_shop_visit_cycles: 14000       # 首修典型进场循环数
+  llp_replacement_threshold_cycles: 500  # 剩余寿命低于此值时计提更换支出
+  engine_premium_switch: false         # 发动机超额溢价因子（2025-26 特殊行情），默认关闭
+
+# ── 租约 ─────────────────────────────
+lease:
+  term_months: 96                      # 8 年
+  lease_rate_factor: 0.0070            # 月 LRF，市场区间 0.65–0.75%（IBA/Ishka）
+  escalation_pct: 0.0
+  pricing_base_usd: 24_000_000         # 租金定价基数
+  # ⚠️ 联动校验：0.70% × $24M ≈ $168k/月 < 市场租 $230–250k/月（737-800）
+  #    模型必须自动检测并提示该矛盾（MODEL_SPEC §6.2）
+
+# ── 债务 ─────────────────────────────
+debt:
+  ltv: 0.70                            # 行业 65–80%（AerCap/Avation 披露）
+  interest_rate_annual: 0.060          # 头部 IG ~4%，中小平台 5.5–6.5%
+  amortization: "monthly_12yr"         # monthly_12yr | bullet | sculpted
+
+# ── 残值曲线锚点（整机，占原值 %；mba Aviation，可信度中）──
+residual_value_curve:
+  year_15: 0.40                        # mba Aviation 737-800 Market Profile 直接披露
+  year_20: 0.32
+  year_25: 0.15                        # ≈ part-out 价值，主要由发动机决定
+
+# ── WACC（透明构建）───────────────────
+wacc:
+  rf: 0.04                             # 无风险利率
+  erp: 0.055                           # 股权风险溢价
+  beta: 1.2
+  kd: 0.06                             # 债务成本
+  tax: 0.21
+  target_d_e: 2.0                      # 目标债务/权益比
+
+# ── 情景（沿用参考项目 A 的设定）────────
+scenarios:
+  base:     {fuel_pct: 0.00, demand_pct: 0.00,  margin_comp: 0.000}
+  downside: {fuel_pct: 0.15, demand_pct: -0.08, margin_comp: 0.025}
+  severe:   {fuel_pct: 0.30, demand_pct: -0.20, margin_comp: 0.050}
+
+# ── 承租方信用（复用项目 A 打分框架，0–100）──
+lessee_credit:
+  score: 66.5
+  ltv_cap_low_score: 0.60              # score < 60 时 LTV 上限
+  lrf_spread_low_score_bp: 10          # score < 60 时 LRF 加点（bp）
+
+# ── 输出 ─────────────────────────────
+output:
+  dir: "outputs"
